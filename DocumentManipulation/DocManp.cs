@@ -12,6 +12,7 @@ namespace DocumentManipulation
     public class DocManp
     {
         string attributeRegexExpr = @"{{([a-zA-Z0-9]+)\|(String|Number|Date|TextArea)}}";
+
         string repeaterRegexExpr = @"{{([a-zA-Z0-9]+)\|([a-zA-Z0-9]+)\|(String|Number|Date|TextArea)}}";
 
         public DocInputs ReadDoc(string srcfilename)

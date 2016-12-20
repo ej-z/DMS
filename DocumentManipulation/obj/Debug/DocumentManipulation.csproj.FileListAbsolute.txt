@@ -1,8 +1,0 @@
-c:\users\ejaz\documents\visual studio 2015\Projects\DocumentManipulation\DocumentManipulation\bin\Debug\DocumentManipulation.exe.config
-c:\users\ejaz\documents\visual studio 2015\Projects\DocumentManipulation\DocumentManipulation\bin\Debug\DocumentManipulation.exe
-c:\users\ejaz\documents\visual studio 2015\Projects\DocumentManipulation\DocumentManipulation\bin\Debug\DocumentManipulation.pdb
-c:\users\ejaz\documents\visual studio 2015\Projects\DocumentManipulation\DocumentManipulation\bin\Debug\DocumentFormat.OpenXml.dll
-c:\users\ejaz\documents\visual studio 2015\Projects\DocumentManipulation\DocumentManipulation\obj\Debug\DocumentManipulation.csprojResolveAssemblyReference.cache
-c:\users\ejaz\documents\visual studio 2015\Projects\DocumentManipulation\DocumentManipulation\obj\Debug\DocumentManipulation.exe
-c:\users\ejaz\documents\visual studio 2015\Projects\DocumentManipulation\DocumentManipulation\obj\Debug\DocumentManipulation.pdb
-C:\Users\Ejaz\documents\visual studio 2015\Projects\DocumentManipulation\DocumentManipulation\bin\Debug\DocumentFormat.OpenXml.xml
