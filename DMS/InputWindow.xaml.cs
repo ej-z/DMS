@@ -33,7 +33,7 @@ namespace DMS
             this.Topmost = true;
         }
 
-        private Control GenerateControl(string name, Attributes attribute)
+        private Control GenerateControl(string name, DocumentManipulation.Attribute attribute)
         {
             return new InputControl(name, StringControl(name, attribute));
             
@@ -52,7 +52,7 @@ namespace DMS
             return null;
         }
 
-        private TextBox StringControl(string name, Attributes attribute)
+        private TextBox StringControl(string name, DocumentManipulation.Attribute attribute)
         {
             var textBox = new TextBox() { Height = 20, Width = 200 };
             Binding binding = new Binding();

@@ -8,37 +8,37 @@ namespace DocumentManipulation
 {
     public class DocInputs
     {
-        Dictionary<string, Attributes> attributes = new Dictionary<string, Attributes>();
-        Dictionary<string, Repeaters> repeaters = new Dictionary<string, Repeaters>();
+        Dictionary<string, Attribute> attributes = new Dictionary<string, Attribute>();
+        Dictionary<string, Repeater> repeaters = new Dictionary<string, Repeater>();
 
-        public Dictionary<string, Attributes> Attributes
+        public Dictionary<string, Attribute> Attributes
         {
             get { return attributes; }
             set { attributes = value; }
         }
 
-        public Dictionary<string, Repeaters> Repeaters
+        public Dictionary<string, Repeater> Repeaters
         {
             get { return repeaters; }
             set { repeaters = value; }
         }
 
-        public Attributes AddAttribute(string name, string type)
+        public Attribute AddAttribute(string name, string type)
         {
             if(!attributes.ContainsKey(name))
-                attributes.Add(name, new Attributes(type));
+                attributes.Add(name, new Attribute(type));
             return attributes[name];
         }
 
-        public Repeaters AddRepeater(string name)
+        public Repeater AddRepeater(string name)
         {
             if (!repeaters.ContainsKey(name))
-                repeaters.Add(name, new Repeaters());
+                repeaters.Add(name, new Repeater());
             return repeaters[name];
         }
     }
 
-    public class Attributes 
+    public class Attribute 
     {
         string _value;
 
@@ -50,25 +50,25 @@ namespace DocumentManipulation
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public Attributes(string type)
+        public Attribute(string type)
         {
             Type = type;
         }
     }
 
-    public class Repeaters
+    public class Repeater
     {
-        Dictionary<string, Attributes> attributes = new Dictionary<string, Attributes>();
-        List<Dictionary<string, Attributes>> attributeList = new List<Dictionary<string, Attributes>>();
+        Dictionary<string, Attribute> attributes = new Dictionary<string, Attribute>();
+        List<Dictionary<string, Attribute>> attributeList = new List<Dictionary<string, Attribute>>();
 
         public void AddAttribute(int position, string name, string type)
         {
             var current = attributeList[position];
             if (!current.ContainsKey(name))
-                current.Add(name, new Attributes(type));
+                current.Add(name, new Attribute(type));
         }
 
-        public Attributes GetAttribute(int position, string name)
+        public Attribute GetAttribute(int position, string name)
         {
             var current = attributeList[position];
             if (!current.ContainsKey(name))
@@ -78,7 +78,7 @@ namespace DocumentManipulation
 
         public int AddAttributeCollection()
         {
-            attributeList.Add(new Dictionary<string, Attributes>());
+            attributeList.Add(new Dictionary<string, Attribute>());
             return attributeList.Count() - 1;
         }
 
