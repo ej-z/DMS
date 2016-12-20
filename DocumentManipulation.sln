@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentManipulation", "DocumentManipulation\DocumentManipulation.csproj", "{42E06158-09E5-4EFC-AE24-BB6FBA675DF7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMS", "DMS\DMS.csproj", "{BBA4A49B-2DD1-4780-B84D-A4B1EA5D343E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{42E06158-09E5-4EFC-AE24-BB6FBA675DF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42E06158-09E5-4EFC-AE24-BB6FBA675DF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42E06158-09E5-4EFC-AE24-BB6FBA675DF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42E06158-09E5-4EFC-AE24-BB6FBA675DF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBA4A49B-2DD1-4780-B84D-A4B1EA5D343E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBA4A49B-2DD1-4780-B84D-A4B1EA5D343E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBA4A49B-2DD1-4780-B84D-A4B1EA5D343E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBA4A49B-2DD1-4780-B84D-A4B1EA5D343E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
