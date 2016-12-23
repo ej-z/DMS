@@ -55,7 +55,7 @@ namespace DocumentManipulation
 
         internal Attribute Clone()
         {
-            return new Attribute(Type) { Value = _value };
+            return new Attribute(Type);
         }
     }
 

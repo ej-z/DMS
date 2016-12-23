@@ -35,7 +35,7 @@ namespace DMS
                 controls.Children.Add(ControlFactory.GenerateRepeaterControl(repeater.Key, repeater.Value));
             }
 
-            this.Topmost = true;
+            //this.Topmost = true;
         }        
 
         private void Button_Click(object sender, RoutedEventArgs e)

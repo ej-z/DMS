@@ -75,7 +75,7 @@ namespace DocumentManipulation
                 {
                     var repeaterName = repeaterRegex.Match(t.InnerText).Groups[1].Value;
                     var repeater = inputs.Repeaters[repeaterName];
-                    var row = t.Descendants<TableRow>().Skip(1).Single();
+                    var row = t.Descendants<TableRow>().Skip(1).First();
                     for (int i = 0; i < repeater.Count - 1; i++)
                     {
                         var newRow = new TableRow();
@@ -88,7 +88,7 @@ namespace DocumentManipulation
 
                     for(int i = 0; i< repeater.Count;i++)
                     {
-                        var r = t.Descendants<TableRow>().Skip(1+i).Single();
+                        var r = t.Descendants<TableRow>().Skip(1+i).First();
                         foreach (Text text in r.Descendants<Text>())
                         {
                             MatchCollection mc1 = repeaterRegex.Matches(text.Text);

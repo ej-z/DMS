@@ -6,15 +6,17 @@
              xmlns:local="clr-namespace:DMS"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-        <Grid.RowDefinitions>
+    <Border Margin="10" BorderThickness="1" BorderBrush="Black">
+        <Grid>
+            <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <Label Name="Label" HorizontalContentAlignment="Center" Content="Placeholder"/>
+        <Label Name="Label" HorizontalContentAlignment="Center" FontWeight="Bold" Content="Placeholder" BorderBrush="Black" BorderThickness="0,0,0,1"/>
         <StackPanel Grid.Row="1">
            <Grid Name="RepeaterGrid" />
-           <Button Content="Add new row"/>
+           <Button Content="Add new row" Click="Button_Click"/>
         </StackPanel>
     </Grid>
+    </Border>
 </UserControl>
