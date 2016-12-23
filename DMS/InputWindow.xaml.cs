@@ -27,40 +27,16 @@ namespace DMS
 
             foreach(var attribute in inputs.Attributes)
             {
-                controls.Children.Add(GenerateControl(attribute.Key,attribute.Value));
+                controls.Children.Add(ControlFactory.GenerateAttributeControl(attribute.Key,attribute.Value));
+            }
+
+            foreach(var repeater in inputs.Repeaters)
+            {
+                controls.Children.Add(ControlFactory.GenerateRepeaterControl(repeater.Key, repeater.Value));
             }
 
             this.Topmost = true;
-        }
-
-        private Control GenerateControl(string name, DocumentManipulation.Attribute attribute)
-        {
-            return new AttributeControl(name, StringControl(name, attribute));
-            
-                switch (attribute.Type)
-            {
-                case "String":
-                    return StringControl(name, attribute);
-                case "Number":
-                    return null;
-                case "Date":
-                    return null;
-                case "TextArea":
-                    return null;
-            }
-
-            return null;
-        }
-
-        private TextBox StringControl(string name, DocumentManipulation.Attribute attribute)
-        {
-            var textBox = new TextBox() { Height = 20, Width = 200 };
-            Binding binding = new Binding();
-            binding.Path = new PropertyPath("Value");
-            binding.Source = attribute;
-            textBox.SetBinding(TextBox.TextProperty, binding);
-            return textBox;
-        }
+        }        
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {

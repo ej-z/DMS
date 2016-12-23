@@ -53,7 +53,7 @@ namespace DocumentManipulation
             Type = type;
         }
 
-        public Attribute Clone()
+        internal Attribute Clone()
         {
             return new Attribute(Type) { Value = _value };
         }
@@ -64,7 +64,9 @@ namespace DocumentManipulation
         Dictionary<string, Attribute> attributes = new Dictionary<string, Attribute>();
         List<Dictionary<string, Attribute>> attributeList = new List<Dictionary<string, Attribute>>();
 
-        public void AddAttribute(int position, string name, string type)
+        public List<Dictionary<string, Attribute>> AttributeList { get { return attributeList; } }
+
+        internal void AddAttribute(int position, string name, string type)
         {
             var current = attributeList[position];
             if (!current.ContainsKey(name))
@@ -82,21 +84,23 @@ namespace DocumentManipulation
         internal int AddAttributeCollection()
         {
             attributeList.Add(new Dictionary<string, Attribute>());
-            return Count - 1;
+            return LastPosition;
         }
 
         public int CloneLastAttributeCollection()
         {
-            var current = attributeList[Count - 1];
+            var current = attributeList[LastPosition];
             var newCollection = new Dictionary<string, Attribute>();            
             foreach(var attribute in current)
             {
                 newCollection.Add(attribute.Key, attribute.Value.Clone());
             }
             attributeList.Add(newCollection);
-            return Count - 1;
+            return LastPosition;
         }
 
         public int Count { get { return attributeList.Count(); } }
+
+        public int LastPosition { get { return Count - 1; } }
     }
 }
