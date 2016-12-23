@@ -17,9 +17,9 @@ namespace DMS
     /// <summary>
     /// Interaction logic for InputControl.xaml
     /// </summary>
-    public partial class InputControl : UserControl
+    public partial class AttributeControl : UserControl
     {
-        public InputControl(string label, Control control)
+        public AttributeControl(string label, Control control)
         {
             InitializeComponent();
             Label.Content = label;

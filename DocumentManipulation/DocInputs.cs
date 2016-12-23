@@ -48,11 +48,14 @@ namespace DocumentManipulation
             get { return _value; }
             set { _value = value; }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
         public Attribute(string type)
         {
             Type = type;
+        }
+
+        public Attribute Clone()
+        {
+            return new Attribute(Type) { Value = _value };
         }
     }
 
@@ -76,10 +79,22 @@ namespace DocumentManipulation
             return current[name];
         }
 
-        public int AddAttributeCollection()
+        internal int AddAttributeCollection()
         {
             attributeList.Add(new Dictionary<string, Attribute>());
-            return attributeList.Count() - 1;
+            return Count - 1;
+        }
+
+        public int CloneLastAttributeCollection()
+        {
+            var current = attributeList[Count - 1];
+            var newCollection = new Dictionary<string, Attribute>();            
+            foreach(var attribute in current)
+            {
+                newCollection.Add(attribute.Key, attribute.Value.Clone());
+            }
+            attributeList.Add(newCollection);
+            return Count - 1;
         }
 
         public int Count { get { return attributeList.Count(); } }

@@ -35,7 +35,7 @@ namespace DMS
 
         private Control GenerateControl(string name, DocumentManipulation.Attribute attribute)
         {
-            return new InputControl(name, StringControl(name, attribute));
+            return new AttributeControl(name, StringControl(name, attribute));
             
                 switch (attribute.Type)
             {
