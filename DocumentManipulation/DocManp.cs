@@ -45,6 +45,9 @@ namespace DocumentManipulation
                         repeater.AddAttribute(pos, m.Groups[2].Value, m.Groups[3].Value);
                     }
                 }
+
+          
+                inputs.AddImageAttribute("Image2", "Image");
             }
             return inputs;
         }
@@ -100,7 +103,9 @@ namespace DocumentManipulation
                         }
                     }
                 }
-            }       
+
+
+            }
         } 
     }
 }

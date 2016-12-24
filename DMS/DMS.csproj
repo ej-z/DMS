@@ -94,10 +94,17 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ControlFactory.cs" />
+    <Compile Include="ImageUpload.xaml.cs">
+      <DependentUpon>ImageUpload.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RepeaterControl.xaml.cs">
       <DependentUpon>RepeaterControl.xaml</DependentUpon>
     </Compile>
     <Page Include="AttributeControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ImageUpload.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

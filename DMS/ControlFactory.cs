@@ -12,17 +12,17 @@ namespace DMS
     {
         public static Control GenerateAttributeControl(string name, DocumentManipulation.Attribute attribute)
         {
-            return new AttributeControl(name, StringControl(name, attribute));
             switch (attribute.Type)
             {
                 case "String":
-                    return StringControl(name, attribute);
+                    return new AttributeControl(name, StringControl(name, attribute));
                 case "Number":
-                    return null;
+                    return new AttributeControl(name, StringControl(name, attribute));
                 case "Date":
-                    return null;
+                    return new AttributeControl(name, StringControl(name, attribute));
                 case "TextArea":
-                    return null;
+                    return new AttributeControl(name, StringControl(name, attribute));
+
             }
 
             return null;
@@ -72,6 +72,11 @@ namespace DMS
             //}
 
             //return null;
+        }
+
+        public static Control GenerateImageControl(string name, DocumentManipulation.ImageAttribute imageAttribute)
+        {
+            return new ImageUpload(name, imageAttribute);
         }
 
         public static Label GenerateRepeaterHeaderControl(string name)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Windows.Media.Imaging;
 
 namespace DocumentManipulation
 {
@@ -10,11 +11,18 @@ namespace DocumentManipulation
     {
         Dictionary<string, Attribute> attributes = new Dictionary<string, Attribute>();
         Dictionary<string, Repeater> repeaters = new Dictionary<string, Repeater>();
+        Dictionary<string, ImageAttribute> imageAttributes = new Dictionary<string, ImageAttribute>();
 
         public Dictionary<string, Attribute> Attributes
         {
             get { return attributes; }
             set { attributes = value; }
+        }
+
+        public Dictionary<string, ImageAttribute> ImageAttributes
+        {
+            get { return imageAttributes; }
+            set { imageAttributes = value; }
         }
 
         public Dictionary<string, Repeater> Repeaters
@@ -28,6 +36,13 @@ namespace DocumentManipulation
             if(!attributes.ContainsKey(name))
                 attributes.Add(name, new Attribute(type));
             return attributes[name];
+        }
+
+        public ImageAttribute AddImageAttribute(string name, string type)
+        {
+            if (!imageAttributes.ContainsKey(name))
+                imageAttributes.Add(name, new ImageAttribute(type));
+            return imageAttributes[name];
         }
 
         public Repeater AddRepeater(string name)
@@ -103,4 +118,16 @@ namespace DocumentManipulation
 
         public int LastPosition { get { return Count - 1; } }
     }
-}
+
+    public class ImageAttribute : Attribute
+    {
+        public ImageAttribute(string type) : base(type)
+        {
+
+        }
+
+        public BitmapImage Image { get; set; }
+
+        public string Description { get; set; }
+    }
+    }
