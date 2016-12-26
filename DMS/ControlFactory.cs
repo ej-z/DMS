@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DMS.Controls;
+using DocumentManipulation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,18 +16,14 @@ namespace DMS
         {
             switch (attribute.Type)
             {
-                case "String":
-                    return new AttributeControl(name, StringControl(name, attribute));
-                case "Number":
-                    return new AttributeControl(name, StringControl(name, attribute));
-                case "Date":
-                    return new AttributeControl(name, StringControl(name, attribute));
+                case "Text":
                 case "TextArea":
-                    return new AttributeControl(name, StringControl(name, attribute));
-
+                    return new TextControl((TextAttribute)attribute);
+                case "Enum":
+                    return new EnumControl((EnumAttribute)attribute);
             }
 
-            return null;
+            return new TextBox();
         }
 
         public static Control GenerateControl(string name, DocumentManipulation.Attribute attribute)

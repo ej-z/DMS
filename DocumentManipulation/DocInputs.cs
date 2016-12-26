@@ -21,7 +21,7 @@ namespace DocumentManipulation
         {
             if (type == "Repeater")
             {
-                AddRepeater(name);
+                AddRepeater(name, properties);
             }
             else if (name.Contains("."))
             {
@@ -41,10 +41,14 @@ namespace DocumentManipulation
             set { repeaters = value; }
         }
 
-        private void AddRepeater(string name)
+        private void AddRepeater(string name, string properties)
         {
             if (!repeaters.ContainsKey(name))
+            {
                 repeaters.Add(name, new Repeater());
+                repeaters[name].SetProperties(properties.Split('|')
+                .ToDictionary(x => x.Split(':')[0], x => x.Split(':').Length > 1 ? x.Split(':')[1] : string.Empty));
+            }
         }
     }
 
@@ -64,7 +68,11 @@ namespace DocumentManipulation
         public int Row { get; set; }
         public int Column { get; set; }
         public int ColumnSpan { get; set; }
+        public bool Visibility { get; set; }
+        public bool RepeaterShow { get; set; }
+        public bool RepeaterWindowShow { get; set; }
 
+        
         public Attribute(string type)
         {
             Type = type;
@@ -72,10 +80,13 @@ namespace DocumentManipulation
 
         public virtual void SetProperties(Dictionary<string,string> properties)
         {
-            Label = properties[nameof(Label)];
-            Row = Convert.ToInt32(properties[nameof(Row)]);
-            Column = Convert.ToInt32(properties[nameof(Column)]);
-            ColumnSpan = Convert.ToInt32(properties[nameof(ColumnSpan)]);
+            Label = properties.ContainsKey(nameof(Label)) ? properties[nameof(Label)]:null;
+            Row = properties.ContainsKey(nameof(Row)) ? Convert.ToInt32(properties[nameof(Row)]) : -1;
+            Column = properties.ContainsKey(nameof(Column)) ? Convert.ToInt32(properties[nameof(Column)]) : -1;
+            ColumnSpan = properties.ContainsKey(nameof(ColumnSpan)) ? Convert.ToInt32(properties[nameof(ColumnSpan)]) : -1;
+            Visibility = properties.ContainsKey(nameof(Visibility)) ? Convert.ToBoolean(properties[nameof(Visibility)]) : false;
+            RepeaterShow = properties.ContainsKey(nameof(RepeaterShow)) ? Convert.ToBoolean(properties[nameof(RepeaterShow)]) : false;
+            RepeaterWindowShow = properties.ContainsKey(nameof(RepeaterWindowShow)) ? Convert.ToBoolean(properties[nameof(RepeaterWindowShow)]) : false;
         }
 
         internal Attribute Clone()
@@ -89,6 +100,11 @@ namespace DocumentManipulation
         readonly List<Dictionary<string, Attribute>> attributeList = new List<Dictionary<string, Attribute>>();
 
         public List<Dictionary<string, Attribute>> AttributeList => attributeList;
+
+        public string Label { get; set; }
+        public int Row { get; set; }
+        public int Column { get; set; }
+        public int ColumnSpan { get; set; }
 
         public Repeater()
         {
@@ -131,6 +147,14 @@ namespace DocumentManipulation
         {
             get { return Count - 1; }
         }
+
+        public virtual void SetProperties(Dictionary<string, string> properties)
+        {
+            Label = properties.ContainsKey(nameof(Label)) ? properties[nameof(Label)] : null;
+            Row = properties.ContainsKey(nameof(Row)) ? Convert.ToInt32(properties[nameof(Row)]) : -1;
+            Column = properties.ContainsKey(nameof(Column)) ? Convert.ToInt32(properties[nameof(Column)]) : -1;
+            ColumnSpan = properties.ContainsKey(nameof(ColumnSpan)) ? Convert.ToInt32(properties[nameof(ColumnSpan)]) : -1;            
+        }
     }
 
     public class TextAttribute : Attribute
@@ -172,11 +196,11 @@ namespace DocumentManipulation
             Values = properties[nameof(Values)].Split(',').ToDictionary(x => x.Split('~')[0], x => x.Split('~')[1]);
         }
 
-        //public override string Value
-        //{
-        //    get { returnbase.Value + Suffix; }
-        //    set { base.Value = value; }
-        //}
+        public override string Value
+        {
+            get { return  string.IsNullOrEmpty(base.Value) ? null : Values[base.Value]; }
+            set { base.Value = value; }
+        }
     }
 
     public class BitAttribute : Attribute

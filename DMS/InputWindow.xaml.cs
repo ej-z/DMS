@@ -24,23 +24,27 @@ namespace DMS
             InitializeComponent();
 
             this.DataContext = inputs;
+            var rowCount = inputs.Attributes.Select(x => x.Value.Row).Max() + inputs.Repeaters.Count;
+            var colCount = inputs.Attributes.Select(x => x.Value.Column).Max();
 
-            foreach(var attribute in inputs.Attributes)
+            for( int i =0; i <= rowCount; i++)
             {
-                controls.Children.Add(ControlFactory.GenerateAttributeControl(attribute.Key,attribute.Value));
+                Controls.RowDefinitions.Add(new RowDefinition());
+            }
+            for (int i = 0; i <= colCount; i++)
+            {
+                Controls.ColumnDefinitions.Add(new ColumnDefinition());
+            }
+
+            foreach (var attribute in inputs.Attributes)
+            {
+                Controls.Children.Add(ControlFactory.GenerateAttributeControl(attribute.Key,attribute.Value));
             }
 
             foreach(var repeater in inputs.Repeaters)
             {
-                controls.Children.Add(ControlFactory.GenerateRepeaterControl(repeater.Key, repeater.Value));
+                Controls.Children.Add(ControlFactory.GenerateRepeaterControl(repeater.Key, repeater.Value));
             }
-
-            //foreach (var imageAttribute in inputs.ImageAttributes)
-            //{
-            //    controls.Children.Add(ControlFactory.GenerateImageControl(imageAttribute.Key, imageAttribute.Value));
-            //}
-
-            //this.Topmost = true;
         }        
 
         private void Button_Click(object sender, RoutedEventArgs e)

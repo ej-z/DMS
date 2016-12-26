@@ -12,7 +12,8 @@
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <ScrollViewer>
-            <StackPanel Name="controls" Orientation="Vertical"></StackPanel>
+            <Grid Name="Controls"></Grid>
+            <!--<StackPanel Name="controls" Orientation="Vertical"></StackPanel>-->
         </ScrollViewer>
         <Button Content="GENERATE" Height="30" Margin="20" Grid.Row="1" Click="Button_Click"></Button>
     </Grid>
