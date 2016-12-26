@@ -38,17 +38,17 @@ namespace DMS
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            try
-            {
+            //try
+            //{
                 DocManp d = new DocManp();
                 DocInputs inputs = d.ReadDoc(FileName.Text);
                 InputWindow iw = new InputWindow(inputs);
                 iw.ShowDialog();
-            }
-            catch(Exception ex)
-            {
-                Logger.Log(ex);
-            }
+            //}
+            //catch(Exception ex)
+            //{
+            //    Logger.Log(ex);
+            //}
         }
 
         DocInputs _inputs;

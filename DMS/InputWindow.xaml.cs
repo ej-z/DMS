@@ -35,10 +35,10 @@ namespace DMS
                 controls.Children.Add(ControlFactory.GenerateRepeaterControl(repeater.Key, repeater.Value));
             }
 
-            foreach (var imageAttribute in inputs.ImageAttributes)
-            {
-                controls.Children.Add(ControlFactory.GenerateImageControl(imageAttribute.Key, imageAttribute.Value));
-            }
+            //foreach (var imageAttribute in inputs.ImageAttributes)
+            //{
+            //    controls.Children.Add(ControlFactory.GenerateImageControl(imageAttribute.Key, imageAttribute.Value));
+            //}
 
             //this.Topmost = true;
         }        

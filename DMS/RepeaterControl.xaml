@@ -14,6 +14,16 @@
         </Grid.RowDefinitions>
         <Label Name="Label" HorizontalContentAlignment="Center" FontWeight="Bold" Content="Placeholder" BorderBrush="Black" BorderThickness="0,0,0,1"/>
         <StackPanel Grid.Row="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                <Button Content="Add"></Button>
+                    <Button Content="Edit" Grid.Column="1"></Button>
+                    <Button Content="Delete" Grid.Column="2"></Button>
+                </Grid>
            <Grid Name="RepeaterGrid" />
            <Button Content="Add new row" Click="Button_Click"/>
         </StackPanel>

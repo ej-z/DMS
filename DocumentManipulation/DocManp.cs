@@ -11,43 +11,24 @@ namespace DocumentManipulation
 {
     public class DocManp
     {
-        string attributeRegexExpr = @"{{([a-zA-Z0-9]+)\|(String|Number|Date|TextArea)}}";
+        string attributeRegexExpr = @"{{([a-zA-Z0-9]+)}}";
 
-        string repeaterRegexExpr = @"{{([a-zA-Z0-9]+)\|([a-zA-Z0-9]+)\|(String|Number|Date|TextArea)}}";
+        string repeaterRegexExpr = @"{{([a-zA-Z0-9]+)\|([a-zA-Z0-9]+)}}";
 
         public DocInputs ReadDoc(string srcfilename)
         {
             DocInputs inputs = new DocInputs();
-            Regex attributeRegex = new Regex(attributeRegexExpr);
-            Regex repeaterRegex = new Regex(repeaterRegexExpr);
             using (var document = WordprocessingDocument.Open(srcfilename, false))
             {     
                 var main = document.MainDocumentPart;
                 var doc = main.Document;
                 var body = doc.Body;
-                foreach (Paragraph para in body.Descendants<Paragraph>())
-                {
-                    MatchCollection mc1 = attributeRegex.Matches(para.InnerText);
-                    foreach (Match m in mc1)
-                    {
-                        inputs.AddAttribute(m.Groups[1].Value, m.Groups[2].Value);
-                    }
-                }
 
-                foreach (Table t in body.Descendants<Table>().Where(tbl => repeaterRegex.IsMatch(tbl.InnerText)))
+                foreach (TableRow row in body.Descendants<Table>().Last().Descendants<TableRow>())
                 {
-                    var repeaterName = repeaterRegex.Match(t.InnerText).Groups[1].Value;
-                    var repeater = inputs.AddRepeater(repeaterName);
-                    int pos = repeater.AddAttributeCollection();
-                    MatchCollection mc1 = repeaterRegex.Matches(t.InnerText);
-                    foreach (Match m in mc1)
-                    {
-                        repeater.AddAttribute(pos, m.Groups[2].Value, m.Groups[3].Value);
-                    }
+                    var cells = row.Descendants<TableCell>().ToArray();
+                    inputs.AddInput(cells[0].InnerText, cells[1].InnerText, cells[2].InnerText);
                 }
-
-          
-                inputs.AddImageAttribute("Image2", "Image");
             }
             return inputs;
         }
