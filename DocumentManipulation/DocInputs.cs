@@ -59,11 +59,13 @@ namespace DocumentManipulation
 
         public string Type;
 
-        public virtual string Value
+        public string Value
         {
             get { return _value; }
             set { _value = value; }
         }
+
+        public virtual string FinalValue { get { return _value; } }
 
         public string Label { get; set; }
         public int Row { get; set; }
@@ -104,17 +106,16 @@ namespace DocumentManipulation
         public string Prefix { get; set; }
         public string Suffix { get; set; }
 
-        public override string Value
+        public override string FinalValue
         {
-            get { return Prefix + base.Value + Suffix; }
-            set { base.Value = value; }
+            get { return Prefix + base.Value + Suffix; }            
         }
 
         public override void SetProperties(Dictionary<string, string> properties)
         {
             base.SetProperties(properties);
             Prefix = properties[nameof(Prefix)];
-            Suffix = properties[nameof(Prefix)];
+            Suffix = properties[nameof(Suffix)];
         }
     }
 
@@ -133,10 +134,9 @@ namespace DocumentManipulation
             Values = properties[nameof(Values)].Split(',').ToDictionary(x => x.Split('~')[0], x => x.Split('~')[1]);
         }
 
-        public override string Value
+        public override string FinalValue
         {
             get { return  string.IsNullOrEmpty(base.Value) ? null : Values[base.Value]; }
-            set { base.Value = value; }
         }
     }
 
@@ -145,14 +145,6 @@ namespace DocumentManipulation
         public BitAttribute(string type) : base(type)
         {
 
-        }
-
-        private bool _value;
-
-        public new bool Value
-        {
-            get { return _value; }
-            set { _value = value; }
         }
     }
 
@@ -189,9 +181,9 @@ namespace DocumentManipulation
             Attributes.Add(attribute);
         }
 
-        public override string Value
+        public override string FinalValue
         {
-            get { return string.Join(", ", Attributes.Select(x => x.Value).ToArray()); }
+            get { return string.Join(", ", Attributes.Select(x => x.FinalValue).ToArray()); }
         }
 
         public void SetProperties(Dictionary<string, string> properties, Dictionary<string, Attribute> attributes)

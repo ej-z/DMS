@@ -26,6 +26,8 @@ namespace DocumentManipulation
         public int Column { get; set; }
         public int ColumnSpan { get; set; }
 
+        public string CountLabel { get; set; }
+
         internal void AddInput(string name, string type, string properties)
         {
             InputData.Add(new InputInfo() {Name = name, Type = type, Properties = properties});
@@ -48,7 +50,7 @@ namespace DocumentManipulation
         public IEnumerable<string> RowValues(int position)
         {
             var current = RepeaterData[position].Attributes;
-            return current.Values.Where(x => !x.WindowOnly).Select(x=> x.Value);
+            return current.Values.Where(x => !x.WindowOnly).Select(x=> x.FinalValue);
         }
 
         public void RemoveAt(int position)
@@ -83,6 +85,7 @@ namespace DocumentManipulation
             Row = properties.ContainsKey(nameof(Row)) ? Convert.ToInt32(properties[nameof(Row)]) : -1;
             Column = properties.ContainsKey(nameof(Column)) ? Convert.ToInt32(properties[nameof(Column)]) : -1;
             ColumnSpan = properties.ContainsKey(nameof(ColumnSpan)) ? Convert.ToInt32(properties[nameof(ColumnSpan)]) : -1;
+            CountLabel = properties.ContainsKey(nameof(CountLabel)) ? properties[nameof(CountLabel)] : null;
         }
     }
 }

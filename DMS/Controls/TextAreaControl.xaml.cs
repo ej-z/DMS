@@ -24,6 +24,8 @@ namespace DMS.Controls
         {
             InitializeComponent();
             Label.Content = attribute.Label;
+            Prefix.Content = attribute.Prefix;
+            Suffix.Content = attribute.Suffix;
             Binding binding = new Binding();
             binding.Path = new PropertyPath("Value");
             binding.Source = attribute;

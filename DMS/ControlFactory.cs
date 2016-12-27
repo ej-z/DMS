@@ -27,6 +27,8 @@ namespace DMS
                     return new LabelControl((LabelAttribute)attribute);
                 case "Enum":
                     return new EnumControl((EnumAttribute)attribute);
+                case "Image":
+                    return new ImageControl((ImageAttribute)attribute);
             }
 
             return new TextBox();
@@ -35,11 +37,6 @@ namespace DMS
         public static Control GenerateRepeaterControl(string name, DocumentManipulation.Repeater repeater)
         {
             return new RepeaterControl(name, repeater);
-        }
-
-        public static Control GenerateImageControl(string name, DocumentManipulation.ImageAttribute imageAttribute)
-        {
-            return new ImageUpload(name, imageAttribute);
         }
 
         public static Label GenerateRepeaterHeaderControl(string name)

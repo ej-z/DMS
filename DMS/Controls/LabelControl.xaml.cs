@@ -18,27 +18,15 @@ namespace DMS.Controls
     /// <summary>
     /// Interaction logic for TextControl.xaml
     /// </summary>
-    public partial class BitControl : UserControl
+    public partial class LabelControl : UserControl
     {
-        DocumentManipulation.BitAttribute _attribute;
-        public BitControl(BitAttribute attribute)
+        public LabelControl(LabelAttribute attribute)
         {
             InitializeComponent();
             Label.Content = attribute.Label;
             this.SetValue(Grid.RowProperty, attribute.Row);
             this.SetValue(Grid.ColumnProperty, attribute.Column);
             this.SetValue(Grid.ColumnSpanProperty, attribute.ColumnSpan);
-            _attribute = attribute;
-        }
-
-        private void CheckBox_OnChecked(object sender, RoutedEventArgs e)
-        {
-            _attribute.Value = true;
-        }
-
-        private void CheckBox_OnUnchecked(object sender, RoutedEventArgs e)
-        {
-            _attribute.Value = false;
         }
     }
 }

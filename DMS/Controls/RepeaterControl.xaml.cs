@@ -31,7 +31,13 @@ namespace DMS
                 header.SetValue(Grid.ColumnProperty, i++);
                 HeaderGrid.Children.Add(header);
             }
+            SetCountLabel();
         }       
+
+        private void SetCountLabel()
+        {
+            CountLabel.Content = repeater.CountLabel + " " + repeater.Count;
+        }
 
         private void Add_Click(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -39,6 +45,7 @@ namespace DMS
             InputWindow iw = new InputWindow(repeater.RepeaterData[i]);
             iw.ShowDialog();
             AddRow(repeater.RowValues(i));
+            SetCountLabel();
         }
 
         private void AddRow(IEnumerable<string> values)
@@ -93,6 +100,7 @@ namespace DMS
             var i = RepeaterHolder.Items.IndexOf(RepeaterHolder.SelectedItems[0]);
             RepeaterHolder.Items.RemoveAt(i);
             repeater.RemoveAt(i);
+            SetCountLabel();
         }
     }
 }

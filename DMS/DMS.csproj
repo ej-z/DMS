@@ -109,8 +109,8 @@
     <Compile Include="Controls\TextControl.xaml.cs">
       <DependentUpon>TextControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ImageUpload.xaml.cs">
-      <DependentUpon>ImageUpload.xaml</DependentUpon>
+    <Compile Include="Controls\ImageControl.xaml.cs">
+      <DependentUpon>ImageControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\RepeaterControl.xaml.cs">
       <DependentUpon>RepeaterControl.xaml</DependentUpon>
@@ -139,7 +139,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ImageUpload.xaml">
+    <Page Include="Controls\ImageControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

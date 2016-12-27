@@ -26,6 +26,7 @@
            </Grid>
            <Grid Name="HeaderGrid" />
            <ListView Name="RepeaterHolder" Background="Transparent" BorderThickness="0" Padding="-1" Margin="-2,0,0,0" HorizontalContentAlignment="Stretch"></ListView>
+           <Label Name="CountLabel"></Label>
         </StackPanel>
     </Grid>
     </Border>

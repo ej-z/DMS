@@ -34,6 +34,8 @@ namespace DMS.Controls
                 var radioButton = new RadioButton();
                 radioButton.Content = val;
                 radioButton.Click += new RoutedEventHandler(RadioButton_Click);
+                if (val == attribute.Value)
+                    radioButton.IsChecked = true;
                 RadioGroup.Children.Add(radioButton);
             }
             _attribute = attribute;
