@@ -17,8 +17,13 @@ namespace DMS
             switch (attribute.Type)
             {
                 case "Text":
-                case "TextArea":
                     return new TextControl((TextAttribute)attribute);
+                case "TextArea":
+                    return new TextAreaControl((TextAttribute)attribute);
+                case "Bit":
+                    return new BitControl((BitAttribute)attribute);
+                case "Label":
+                    return new LabelControl((LabelAttribute)attribute);
                 case "Enum":
                     return new EnumControl((EnumAttribute)attribute);
             }

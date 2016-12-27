@@ -11,6 +11,7 @@ namespace DMS
     {
         int row = 1;
         DocumentManipulation.Repeater repeater;
+
         public RepeaterControl(string label, DocumentManipulation.Repeater repeater)
         {
             this.repeater = repeater;
@@ -19,10 +20,10 @@ namespace DMS
             this.SetValue(Grid.RowProperty, repeater.Row);
             this.SetValue(Grid.ColumnProperty, repeater.Column);
             this.SetValue(Grid.ColumnSpanProperty, repeater.ColumnSpan);
-        var initialRow = repeater.AttributeList[repeater.LastPosition];
+            var initialRow = repeater.AttributeList[repeater.LastPosition];
             RepeaterGrid.RowDefinitions.Add(new RowDefinition());
             int i = 0;
-            foreach(var key in initialRow.Keys)
+            foreach (var key in initialRow.Keys)
             {
                 RepeaterGrid.ColumnDefinitions.Add(new ColumnDefinition());
                 var header = ControlFactory.GenerateRepeaterHeaderControl(key);

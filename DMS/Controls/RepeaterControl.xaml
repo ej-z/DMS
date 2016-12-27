@@ -25,7 +25,6 @@
                     <Button Content="Delete" Grid.Column="2" Click="Delete_Click"></Button>
                 </Grid>
            <Grid Name="RepeaterGrid" />
-           <Button Content="Add new row" Click="Button_Click"/>
         </StackPanel>
     </Grid>
     </Border>

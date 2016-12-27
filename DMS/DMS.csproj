@@ -94,8 +94,17 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ControlFactory.cs" />
+    <Compile Include="Controls\LabelControl.xaml.cs">
+      <DependentUpon>LabelControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\BitControl.xaml.cs">
+      <DependentUpon>BitControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\EnumControl.xaml.cs">
       <DependentUpon>EnumControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TextAreaControl.xaml.cs">
+      <DependentUpon>TextAreaControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\TextControl.xaml.cs">
       <DependentUpon>TextControl.xaml</DependentUpon>
@@ -110,7 +119,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\LabelControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\BitControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\EnumControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\TextAreaControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

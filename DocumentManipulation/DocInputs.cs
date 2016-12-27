@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Media.Imaging;
+using DocumentFormat.OpenXml;
 
 namespace DocumentManipulation
 {
@@ -68,9 +69,8 @@ namespace DocumentManipulation
         public int Row { get; set; }
         public int Column { get; set; }
         public int ColumnSpan { get; set; }
-        public bool Visibility { get; set; }
-        public bool RepeaterShow { get; set; }
-        public bool RepeaterWindowShow { get; set; }
+        public bool RepeaterGridOnly { get; set; }
+        public bool RepeaterWindowOnly { get; set; }
 
         
         public Attribute(string type)
@@ -84,12 +84,11 @@ namespace DocumentManipulation
             Row = properties.ContainsKey(nameof(Row)) ? Convert.ToInt32(properties[nameof(Row)]) : -1;
             Column = properties.ContainsKey(nameof(Column)) ? Convert.ToInt32(properties[nameof(Column)]) : -1;
             ColumnSpan = properties.ContainsKey(nameof(ColumnSpan)) ? Convert.ToInt32(properties[nameof(ColumnSpan)]) : -1;
-            Visibility = properties.ContainsKey(nameof(Visibility)) ? Convert.ToBoolean(properties[nameof(Visibility)]) : false;
-            RepeaterShow = properties.ContainsKey(nameof(RepeaterShow)) ? Convert.ToBoolean(properties[nameof(RepeaterShow)]) : false;
-            RepeaterWindowShow = properties.ContainsKey(nameof(RepeaterWindowShow)) ? Convert.ToBoolean(properties[nameof(RepeaterWindowShow)]) : false;
+            RepeaterGridOnly = properties.ContainsKey(nameof(RepeaterGridOnly)) && Convert.ToBoolean(properties[nameof(RepeaterGridOnly)]);
+            RepeaterWindowOnly = properties.ContainsKey(nameof(RepeaterWindowOnly)) && Convert.ToBoolean(properties[nameof(RepeaterWindowOnly)]);
         }
 
-        internal Attribute Clone()
+        internal virtual Attribute Clone()
         {
             return new Attribute(Type);
         }
@@ -97,8 +96,11 @@ namespace DocumentManipulation
 
     public class Repeater
     {
+       Dictionary<string,Attribute> repeaterAttributes = new Dictionary<string, Attribute>(); 
+
         readonly List<Dictionary<string, Attribute>> attributeList = new List<Dictionary<string, Attribute>>();
 
+        public Dictionary<string, Attribute> RepeaterAttributes => repeaterAttributes; 
         public List<Dictionary<string, Attribute>> AttributeList => attributeList;
 
         public string Label { get; set; }
@@ -113,9 +115,8 @@ namespace DocumentManipulation
 
         internal void AddAttribute(string name, string type, string properties)
         {
-            var current = attributeList[LastPosition];
-            if (!current.ContainsKey(name))
-                current.Add(name, AttributeFactory.Create(type, properties, current));
+            if (!repeaterAttributes.ContainsKey(name))
+                repeaterAttributes.Add(name, AttributeFactory.Create(type, properties, repeaterAttributes));
         }
 
         public Attribute GetAttribute(int position, string name)
@@ -126,11 +127,10 @@ namespace DocumentManipulation
             return current[name];
         }
 
-        public int CloneLastAttributeCollection()
+        public int CloneAttributeCollection()
         {
-            var current = attributeList[LastPosition];
             var newCollection = new Dictionary<string, Attribute>();
-            foreach (var attribute in current)
+            foreach (var attribute in repeaterAttributes)
             {
                 newCollection.Add(attribute.Key, attribute.Value.Clone());
             }
@@ -210,11 +210,21 @@ namespace DocumentManipulation
 
         }
 
-        //public override string Value
-        //{
-        //    get { returnbase.Value + Suffix; }
-        //    set { base.Value = value; }
-        //}
+        private bool _value;
+
+        public new bool Value
+        {
+            get { return _value; }
+            set { _value = value; }
+        }
+    }
+
+    public class LabelAttribute : Attribute
+    {
+        public LabelAttribute(string type) : base(type)
+        {
+            
+        }
     }
 
     public class ImageAttribute : Attribute

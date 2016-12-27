@@ -24,6 +24,9 @@ namespace DocumentManipulation
                 case "Bit":
                     attribute = new BitAttribute(type);
                     break;
+                case "Label":
+                    attribute = new LabelAttribute(type);
+                    break;
                 case "Image":
                     attribute = new ImageAttribute(type);
                     break;
