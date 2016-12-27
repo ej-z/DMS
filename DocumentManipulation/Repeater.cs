@@ -45,10 +45,15 @@ namespace DocumentManipulation
             return originalInput.Attributes.Values.Where(x => !x.WindowOnly).Select(x => x.Label);
         }
 
-        public IEnumerable<string> CurrentRowValues()
+        public IEnumerable<string> RowValues(int position)
         {
-            var current = RepeaterData[LastPosition].Attributes;
+            var current = RepeaterData[position].Attributes;
             return current.Values.Where(x => !x.WindowOnly).Select(x=> x.Value);
+        }
+
+        public void RemoveAt(int position)
+        {
+            RepeaterData.RemoveAt(position);
         }
 
         public int CloneInput()

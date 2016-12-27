@@ -23,26 +23,32 @@ namespace DMS
             this.SetValue(Grid.RowProperty, repeater.Row);
             this.SetValue(Grid.ColumnProperty, repeater.Column);
             this.SetValue(Grid.ColumnSpanProperty, repeater.ColumnSpan);
-            HeaderGrid.RowDefinitions.Add(new RowDefinition());
             int i = 0;
             foreach (var key in repeater.GridHeaders())
             {
-                HeaderGrid.ColumnDefinitions.Add(new ColumnDefinition());
+                HeaderGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
                 var header = ControlFactory.GenerateRepeaterHeaderControl(key);
                 header.SetValue(Grid.ColumnProperty, i++);
                 HeaderGrid.Children.Add(header);
             }
+        }       
+
+        private void Add_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var i = repeater.CloneInput();
+            InputWindow iw = new InputWindow(repeater.RepeaterData[i]);
+            iw.ShowDialog();
+            AddRow(repeater.RowValues(i));
         }
 
-        private void AddNewRow(IEnumerable<string> values)
+        private void AddRow(IEnumerable<string> values)
         {
             Grid row = new Grid();
-            row.RowDefinitions.Add(new RowDefinition());
             int i = 0;
             foreach (var value in values)
             {
-                row.ColumnDefinitions.Add(new ColumnDefinition());
-                var cell = ControlFactory.GenerateRepeaterHeaderControl(value);
+                row.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+                var cell = ControlFactory.GenerateRepeaterRowControl(value);
                 cell.SetValue(Grid.ColumnProperty, i++);
                 row.Children.Add(cell);
             }
@@ -52,22 +58,41 @@ namespace DMS
             RepeaterHolder.Items.Add(item);
         }
 
-        private void Add_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            var i = repeater.CloneInput();
-            InputWindow iw = new InputWindow(repeater.RepeaterData[i]);
-            iw.ShowDialog();
-            AddNewRow(repeater.CurrentRowValues());
-        }
-
         private void Edit_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            string s = "";
+            if (RepeaterHolder.SelectedItems.Count == 0)
+            {
+                System.Windows.MessageBox.Show("Please select a row.");
+                return;
+            }
+            var i = RepeaterHolder.Items.IndexOf(RepeaterHolder.SelectedItems[0]);
+            InputWindow iw = new InputWindow(repeater.RepeaterData[i]);
+            iw.ShowDialog();
+            EditRow(repeater.RowValues(i), (Grid)((System.Windows.Controls.ListViewItem)RepeaterHolder.SelectedItems[0]).Content);
+        }
+
+        private void EditRow(IEnumerable<string> values, Grid row)
+        {
+            int i = 0;
+            row.Children.Clear();
+            foreach (var value in values)
+            {
+                var cell = ControlFactory.GenerateRepeaterRowControl(value);
+                cell.SetValue(Grid.ColumnProperty, i++);
+                row.Children.Add(cell);
+            }
         }
 
         private void Delete_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            string s = "";
+            if (RepeaterHolder.SelectedItems.Count == 0)
+            {
+                System.Windows.MessageBox.Show("Please select a row.");
+                return;
+            }
+            var i = RepeaterHolder.Items.IndexOf(RepeaterHolder.SelectedItems[0]);
+            RepeaterHolder.Items.RemoveAt(i);
+            repeater.RemoveAt(i);
         }
     }
 }
