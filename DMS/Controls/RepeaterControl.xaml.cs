@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace DMS
 {
@@ -20,53 +23,51 @@ namespace DMS
             this.SetValue(Grid.RowProperty, repeater.Row);
             this.SetValue(Grid.ColumnProperty, repeater.Column);
             this.SetValue(Grid.ColumnSpanProperty, repeater.ColumnSpan);
-            var initialRow = repeater.AttributeList[repeater.LastPosition];
-            RepeaterGrid.RowDefinitions.Add(new RowDefinition());
+            HeaderGrid.RowDefinitions.Add(new RowDefinition());
             int i = 0;
-            foreach (var key in initialRow.Keys)
+            foreach (var key in repeater.GridHeaders())
             {
-                RepeaterGrid.ColumnDefinitions.Add(new ColumnDefinition());
+                HeaderGrid.ColumnDefinitions.Add(new ColumnDefinition());
                 var header = ControlFactory.GenerateRepeaterHeaderControl(key);
                 header.SetValue(Grid.ColumnProperty, i++);
-                RepeaterGrid.Children.Add(header);
+                HeaderGrid.Children.Add(header);
             }
-            AddNewRow(initialRow);
         }
 
-        private void AddNewRow(Dictionary<string, DocumentManipulation.Attribute> attributeList)
+        private void AddNewRow(IEnumerable<string> values)
         {
-            RepeaterGrid.RowDefinitions.Add(new RowDefinition());
+            Grid row = new Grid();
+            row.RowDefinitions.Add(new RowDefinition());
             int i = 0;
-            foreach (var attribute in attributeList)
+            foreach (var value in values)
             {
-                var control = ControlFactory.GenerateControl(attribute.Key, attribute.Value);
-                control.SetValue(Grid.ColumnProperty, i++);
-                control.SetValue(Grid.RowProperty, row);
-                RepeaterGrid.Children.Add(control);                
+                row.ColumnDefinitions.Add(new ColumnDefinition());
+                var cell = ControlFactory.GenerateRepeaterHeaderControl(value);
+                cell.SetValue(Grid.ColumnProperty, i++);
+                row.Children.Add(cell);
             }
-            row++;
-        }
 
-        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            repeater.CloneLastAttributeCollection();
-            var newRow = repeater.AttributeList[repeater.LastPosition];
-            AddNewRow(newRow);
+            var item = new System.Windows.Controls.ListViewItem();
+            item.Content = row;
+            RepeaterHolder.Items.Add(item);
         }
 
         private void Add_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-
+            var i = repeater.CloneInput();
+            InputWindow iw = new InputWindow(repeater.RepeaterData[i]);
+            iw.ShowDialog();
+            AddNewRow(repeater.CurrentRowValues());
         }
 
         private void Edit_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-
+            string s = "";
         }
 
         private void Delete_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-
+            string s = "";
         }
     }
 }

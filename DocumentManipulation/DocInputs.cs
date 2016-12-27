@@ -28,7 +28,7 @@ namespace DocumentManipulation
             {
                 var repeaterName = name.Split('.')[0];
                 var attributeName = name.Split('.')[1];
-                repeaters[repeaterName].AddAttribute(attributeName,type, properties);
+                repeaters[repeaterName].AddInput(attributeName,type, properties);
             }
             else
             {
@@ -69,8 +69,8 @@ namespace DocumentManipulation
         public int Row { get; set; }
         public int Column { get; set; }
         public int ColumnSpan { get; set; }
-        public bool RepeaterGridOnly { get; set; }
-        public bool RepeaterWindowOnly { get; set; }
+        public bool GridOnly { get; set; }
+        public bool WindowOnly { get; set; }
 
         
         public Attribute(string type)
@@ -84,76 +84,13 @@ namespace DocumentManipulation
             Row = properties.ContainsKey(nameof(Row)) ? Convert.ToInt32(properties[nameof(Row)]) : -1;
             Column = properties.ContainsKey(nameof(Column)) ? Convert.ToInt32(properties[nameof(Column)]) : -1;
             ColumnSpan = properties.ContainsKey(nameof(ColumnSpan)) ? Convert.ToInt32(properties[nameof(ColumnSpan)]) : -1;
-            RepeaterGridOnly = properties.ContainsKey(nameof(RepeaterGridOnly)) && Convert.ToBoolean(properties[nameof(RepeaterGridOnly)]);
-            RepeaterWindowOnly = properties.ContainsKey(nameof(RepeaterWindowOnly)) && Convert.ToBoolean(properties[nameof(RepeaterWindowOnly)]);
+            GridOnly = properties.ContainsKey(nameof(GridOnly)) && Convert.ToBoolean(properties[nameof(GridOnly)]);
+            WindowOnly = properties.ContainsKey(nameof(WindowOnly)) && Convert.ToBoolean(properties[nameof(WindowOnly)]);
         }
 
         internal virtual Attribute Clone()
         {
             return new Attribute(Type);
-        }
-    }
-
-    public class Repeater
-    {
-       Dictionary<string,Attribute> repeaterAttributes = new Dictionary<string, Attribute>(); 
-
-        readonly List<Dictionary<string, Attribute>> attributeList = new List<Dictionary<string, Attribute>>();
-
-        public Dictionary<string, Attribute> RepeaterAttributes => repeaterAttributes; 
-        public List<Dictionary<string, Attribute>> AttributeList => attributeList;
-
-        public string Label { get; set; }
-        public int Row { get; set; }
-        public int Column { get; set; }
-        public int ColumnSpan { get; set; }
-
-        public Repeater()
-        {
-            attributeList.Add(new Dictionary<string, Attribute>());
-        }
-
-        internal void AddAttribute(string name, string type, string properties)
-        {
-            if (!repeaterAttributes.ContainsKey(name))
-                repeaterAttributes.Add(name, AttributeFactory.Create(type, properties, repeaterAttributes));
-        }
-
-        public Attribute GetAttribute(int position, string name)
-        {
-            var current = attributeList[position];
-            if (!current.ContainsKey(name))
-                return null;
-            return current[name];
-        }
-
-        public int CloneAttributeCollection()
-        {
-            var newCollection = new Dictionary<string, Attribute>();
-            foreach (var attribute in repeaterAttributes)
-            {
-                newCollection.Add(attribute.Key, attribute.Value.Clone());
-            }
-            attributeList.Add(newCollection);
-            return LastPosition;
-        }
-
-        public int Count
-        {
-            get { return attributeList.Count(); }
-        }
-
-        public int LastPosition
-        {
-            get { return Count - 1; }
-        }
-
-        public virtual void SetProperties(Dictionary<string, string> properties)
-        {
-            Label = properties.ContainsKey(nameof(Label)) ? properties[nameof(Label)] : null;
-            Row = properties.ContainsKey(nameof(Row)) ? Convert.ToInt32(properties[nameof(Row)]) : -1;
-            Column = properties.ContainsKey(nameof(Column)) ? Convert.ToInt32(properties[nameof(Column)]) : -1;
-            ColumnSpan = properties.ContainsKey(nameof(ColumnSpan)) ? Convert.ToInt32(properties[nameof(ColumnSpan)]) : -1;            
         }
     }
 

@@ -36,7 +36,7 @@ namespace DMS
                 Controls.ColumnDefinitions.Add(new ColumnDefinition());
             }
 
-            foreach (var attribute in inputs.Attributes)
+            foreach (var attribute in inputs.Attributes.Where(x => !x.Value.GridOnly))
             {
                 Controls.Children.Add(ControlFactory.GenerateAttributeControl(attribute.Key,attribute.Value));
             }

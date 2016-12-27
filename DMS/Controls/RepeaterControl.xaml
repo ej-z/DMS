@@ -24,7 +24,9 @@
                     <Button Content="Edit" Grid.Column="1" Click="Edit_Click"></Button>
                     <Button Content="Delete" Grid.Column="2" Click="Delete_Click"></Button>
                 </Grid>
-           <Grid Name="RepeaterGrid" />
+           <Grid Name="HeaderGrid" />
+           <ListView Name="RepeaterHolder">
+           </ListView>
         </StackPanel>
     </Grid>
     </Border>
