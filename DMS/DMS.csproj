@@ -115,10 +115,6 @@
     <Compile Include="Controls\RepeaterControl.xaml.cs">
       <DependentUpon>RepeaterControl.xaml</DependentUpon>
     </Compile>
-    <Page Include="AttributeControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Controls\LabelControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -154,9 +150,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AttributeControl.xaml.cs">
-      <DependentUpon>AttributeControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="InputWindow.xaml.cs">
       <DependentUpon>InputWindow.xaml</DependentUpon>

@@ -18,9 +18,9 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Label Name="Prefix" Content="Placeholder"/>
+            <Label Name="Prefix" Content="Placeholder" Padding="0"/>
             <TextBox Name="TextBox" Grid.Column="1" Height="60" TextWrapping="Wrap" AcceptsReturn="True" VerticalAlignment="Top" ></TextBox>
-            <Label Name="Suffix" Grid.Column="2" Content="Placeholder"/>
+            <Label Name="Suffix" Grid.Column="2" Content="Placeholder" Padding="0"/>
         </Grid>
     </Grid>
 </UserControl>
