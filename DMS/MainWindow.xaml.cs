@@ -72,17 +72,17 @@ namespace DMS
 
             if (result == true)
             {
-                try
-                {
+                //try
+                //{
                     string filename = dlg.FileName;
                     DocManp d = new DocManp();
                     d.CreateDoc(_inputs, FileName.Text, filename);
                     System.Diagnostics.Process.Start(filename);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Log(ex);
-                }
+                //}
+                //catch (Exception ex)
+                //{
+                //    Logger.Log(ex);
+                //}
             }
             DownloadButton.Visibility = Visibility.Hidden;            
         }

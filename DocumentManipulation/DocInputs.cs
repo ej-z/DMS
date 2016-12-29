@@ -146,6 +146,14 @@ namespace DocumentManipulation
         {
 
         }
+
+        public string Group { get; set; }
+
+        public override void SetProperties(Dictionary<string, string> properties)
+        {
+            base.SetProperties(properties);
+            Group = properties[nameof(Group)];
+        }
     }
 
     public class LabelAttribute : Attribute
