@@ -182,6 +182,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Data\Loose fill form .xlsx" />
+    <None Include="Data\Template version 1 - Copy.docx" />
+    <None Include="Data\Template version 1.docx" />
     <None Include="DMS_TemporaryKey.pfx" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
