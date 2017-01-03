@@ -20,7 +20,7 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="35"></ColumnDefinition>
         </Grid.ColumnDefinitions>          
-        <TextBox Name="FileName" ></TextBox>
+        <TextBox Name="FileName" Height="22"></TextBox>
         <Button Content="..." Grid.Column="1" Click="Button_Click"></Button>
         </Grid>
         <Button Content="SUBMIT" Margin="20" Height="30" Grid.Row="1" Grid.ColumnSpan="2" Click="Button_Click_1"/>

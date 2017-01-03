@@ -9,11 +9,16 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <DataTemplate x:Key="CustomTemplate">
-            <Grid>
+            <Border Padding="3">
                 <TextBlock Text="{Binding Path=FinalValue}" TextWrapping="Wrap" />
-            </Grid>
+            </Border>
         </DataTemplate>
-
+        <Style TargetType="{x:Type DataGridColumnHeader}">
+            <Setter Property="BorderBrush" Value="DarkGray"/>
+            <Setter Property="BorderThickness" Value="1,1,1,1"/>
+            <Setter Property="Padding" Value="3"></Setter>
+            <Setter Property="FontWeight" Value="Bold"></Setter>
+        </Style>
     </UserControl.Resources>
     <Border Margin="10">
         <Grid>
@@ -34,7 +39,7 @@
                 <Button Content="Delete" Grid.Column="2" Click="Delete_Click"></Button>
            </Grid>
                 <DataGrid Name="dataGrid" 
-                   AutoGenerateColumns="false" 
+                   AutoGenerateColumns="false" BorderThickness="0" HorizontalGridLinesBrush="DarkGray" VerticalGridLinesBrush="DarkGray"
                    />
            <Label Name="CountLabel"></Label>
         </StackPanel>
