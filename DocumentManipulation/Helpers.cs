@@ -14,7 +14,7 @@ namespace DocumentManipulation
 
         public static string ToRepeaterString(this string name, string repeaterName)
         {
-            return "{{" + repeaterName + "|" + name + "}}";
+            return "{{" + repeaterName + "." + name + "}}";
         }
 
         public static string ToGroupString(this string group)

@@ -108,7 +108,7 @@ namespace DocumentManipulation
 
         public override string FinalValue
         {
-            get { return Prefix + base.Value + Suffix; }            
+            get { return string.IsNullOrEmpty(base.Value) ? base.Value : Prefix + base.Value + Suffix; }
         }
 
         public override void SetProperties(Dictionary<string, string> properties)
@@ -191,7 +191,7 @@ namespace DocumentManipulation
 
         public override string FinalValue
         {
-            get { return string.Join(", ", Attributes.Select(x => x.FinalValue).ToArray()); }
+            get { return string.Join(", ", Attributes.Where(x => !string.IsNullOrEmpty(x.FinalValue)).Select(x => x.FinalValue).ToArray()); }
         }
 
         public void SetProperties(Dictionary<string, string> properties, Dictionary<string, Attribute> attributes)

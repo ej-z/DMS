@@ -15,7 +15,7 @@ namespace DocumentManipulation
 
         string bitRegexExpr = @"\[\[([a-zA-Z0-9]+)\]\]";
 
-        string repeaterRegexExpr = @"{{([a-zA-Z0-9]+)\|([a-zA-Z0-9]+)}}";
+        string repeaterRegexExpr = @"{{([a-zA-Z0-9]+)\.([a-zA-Z0-9]+)}}";
 
         public DocInputs ReadDoc(string srcfilename)
         {
@@ -126,13 +126,16 @@ namespace DocumentManipulation
                             foreach (Match m in mc1)
                             {
                                 var name = m.Groups[2].Value;
-                                text.Text = text.Text.Replace(name.ToRepeaterString(m.Groups[1].Value), repeater.GetAttribute(i,name).Value);
+                                text.Text = text.Text.Replace(name.ToRepeaterString(m.Groups[1].Value), repeater.GetAttribute(i,name).FinalValue);
                             }
                         }
                     }
                 }
 
-
+                var configTable = body.Descendants<Table>().Last();
+                configTable.Remove();
+                var lastBreak = doc.Descendants<Break>().Last();
+                lastBreak.Remove();
             }
         } 
     }
