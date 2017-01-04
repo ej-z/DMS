@@ -84,14 +84,17 @@ namespace DocumentManipulation
 
                     for (int i = 0; i < maxGroupCount; i++)
                     {
-                        var r = t.Descendants<TableRow>().First(tbl => bitRegex.IsMatch(tbl.InnerText));
+                        var r = t.Descendants<TableRow>().Skip(i).First(tbl => bitRegex.IsMatch(tbl.InnerText));
                         foreach (Text text in r.Descendants<Text>())
                         {
                             MatchCollection mc2 = bitRegex.Matches(text.Text);
-                            foreach (Match m in mc1)
+                            foreach (Match m in mc2)
                             {
                                 var group = m.Groups[1].Value;
-                                text.Text = text.Text.Replace(group.ToGroupString(), availableBitAttributes[group][i].Label);
+                                if (i < availableBitAttributes[group].Count)
+                                    text.Text = text.Text.Replace(group.ToGroupString(), availableBitAttributes[group][i].Label);
+                                else
+                                    text.Text = string.Empty;
                             }
                         }
                     }
@@ -103,7 +106,7 @@ namespace DocumentManipulation
                 {
                     var repeaterName = repeaterRegex.Match(t.InnerText).Groups[1].Value;
                     var repeater = inputs.Repeaters[repeaterName];
-                    var row = t.Descendants<TableRow>().Skip(1).First();
+                    var row = t.Descendants<TableRow>().First(tbl => repeaterRegex.IsMatch(tbl.InnerText));
                     for (int i = 0; i < repeater.Count - 1; i++)
                     {
                         var newRow = new TableRow();
@@ -116,7 +119,7 @@ namespace DocumentManipulation
 
                     for(int i = 0; i< repeater.Count;i++)
                     {
-                        var r = t.Descendants<TableRow>().Skip(1+i).First();
+                        var r = t.Descendants<TableRow>().Skip(i).First(tbl => repeaterRegex.IsMatch(tbl.InnerText));
                         foreach (Text text in r.Descendants<Text>())
                         {
                             MatchCollection mc1 = repeaterRegex.Matches(text.Text);
