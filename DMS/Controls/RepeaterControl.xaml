@@ -4,8 +4,22 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DMS"
+             xmlns:forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <DataTemplate x:Key="CustomTemplate">
+            <Border Padding="3">
+                <TextBlock Text="{Binding Path=FinalValue}" TextWrapping="Wrap" />
+            </Border>
+        </DataTemplate>
+        <Style TargetType="{x:Type DataGridColumnHeader}">
+            <Setter Property="BorderBrush" Value="DarkGray"/>
+            <Setter Property="BorderThickness" Value="1,1,1,1"/>
+            <Setter Property="Padding" Value="3"></Setter>
+            <Setter Property="FontWeight" Value="Bold"></Setter>
+        </Style>
+    </UserControl.Resources>
     <Border Margin="10">
         <Grid>
             <Grid.RowDefinitions>
@@ -24,8 +38,9 @@
                 <Button Content="Edit" Grid.Column="1" Click="Edit_Click"></Button>
                 <Button Content="Delete" Grid.Column="2" Click="Delete_Click"></Button>
            </Grid>
-           <Grid Name="HeaderGrid" />
-           <ListView Name="RepeaterHolder" Background="Transparent" BorderThickness="0" Padding="-1" Margin="-2,0,0,0" HorizontalContentAlignment="Stretch"></ListView>
+                <DataGrid Name="dataGrid" 
+                   AutoGenerateColumns="false" BorderThickness="0" HorizontalGridLinesBrush="DarkGray" VerticalGridLinesBrush="DarkGray"
+                   />
            <Label Name="CountLabel"></Label>
         </StackPanel>
     </Grid>

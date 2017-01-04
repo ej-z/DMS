@@ -38,22 +38,5 @@ namespace DMS
         {
             return new RepeaterControl(name, repeater);
         }
-
-        public static Label GenerateRepeaterHeaderControl(string name)
-        {
-            var label = GenerateRepeaterRowControl(name);
-            label.HorizontalContentAlignment = HorizontalAlignment.Center;
-            label.FontWeight = FontWeights.Bold;
-            return label;
-        }
-
-        public static Label GenerateRepeaterRowControl(string name)
-        {
-            var label = new Label();
-            label.Content = name;
-            label.BorderBrush = Brushes.Black;
-            label.BorderThickness = new Thickness(0.5);
-            return label;
-        }
     }
 }

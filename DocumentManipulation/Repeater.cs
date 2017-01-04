@@ -42,15 +42,15 @@ namespace DocumentManipulation
             return current[name];
         }
 
-        public IEnumerable<string> GridHeaders()
+        public IEnumerable<Header> GridHeaders()
         {
-            return originalInput.Attributes.Values.Where(x => !x.WindowOnly).Select(x => x.Label);
+            return originalInput.Attributes.Values.Where(x => !x.WindowOnly).Select((x, i) => new Header(){ Label = x.Label, Index = i });
         }
 
-        public IEnumerable<string> RowValues(int position)
+        public IEnumerable<Attribute> RowValues(int position)
         {
             var current = RepeaterData[position].Attributes;
-            return current.Values.Where(x => !x.WindowOnly).Select(x=> x.FinalValue);
+            return current.Values.Where(x => !x.WindowOnly);
         }
 
         public void RemoveAt(int position)
@@ -87,5 +87,11 @@ namespace DocumentManipulation
             ColumnSpan = properties.ContainsKey(nameof(ColumnSpan)) ? Convert.ToInt32(properties[nameof(ColumnSpan)]) : -1;
             CountLabel = properties.ContainsKey(nameof(CountLabel)) ? properties[nameof(CountLabel)] : null;
         }
+    }
+
+    public class Header
+    {
+        public string Label;
+        public int Index;
     }
 }
