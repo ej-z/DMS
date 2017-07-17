@@ -19,6 +19,7 @@ namespace DMS
     /// </summary>
     public partial class InputWindow : Window
     {
+        public bool wasSubmited { get; private set; }
         public InputWindow(DocInputs inputs)
         {
             InitializeComponent();
@@ -38,17 +39,22 @@ namespace DMS
 
             foreach (var attribute in inputs.Attributes.Where(x => !x.Value.GridOnly))
             {
-                Controls.Children.Add(ControlFactory.GenerateAttributeControl(attribute.Key,attribute.Value));
+                var cntrl = ControlFactory.GenerateAttributeControl(attribute.Key, attribute.Value);
+                if(cntrl != null)
+                    Controls.Children.Add(cntrl);
             }
 
             foreach(var repeater in inputs.Repeaters)
             {
-                Controls.Children.Add(ControlFactory.GenerateRepeaterControl(repeater.Key, repeater.Value));
+                var cntrl = ControlFactory.GenerateRepeaterControl(repeater.Key, repeater.Value);
+                if (cntrl != null)
+                    Controls.Children.Add(cntrl);
             }
         }        
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            wasSubmited = true;
             var mainWindow = Application.Current.Windows.OfType<MainWindow>().First();
             mainWindow.SetInputs((DocInputs)DataContext);
             this.Close();

@@ -50,6 +50,11 @@ namespace DMS
             var i = repeater.CloneInput();
             InputWindow iw = new InputWindow(repeater.RepeaterData[i]);
             iw.ShowDialog();
+            if (!iw.wasSubmited)
+            {
+                repeater.RemoveAt(i);
+                return;
+            }
             _records.Add(new Record(repeater.RowValues(i)));
             SetCountLabel();
         }

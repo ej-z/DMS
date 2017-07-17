@@ -26,14 +26,10 @@ namespace DMS
             _attribute = attribute;
             OnLoad(attribute);
             Label.Content = attribute.Label;
-            Description.Content = attribute.Label + " Description";
             this.SetValue(Grid.RowProperty, attribute.Row);
             this.SetValue(Grid.ColumnProperty, attribute.Column);
             this.SetValue(Grid.ColumnSpanProperty, attribute.ColumnSpan);
         }
-
-        public BitmapImage Image { get; set; }
-
 
         public void OnLoad(DocumentManipulation.ImageAttribute attribute)
         {
@@ -41,12 +37,6 @@ namespace DMS
             binding.Path = new PropertyPath("Value");
             binding.Source = attribute;
             FileName.SetBinding(TextBox.TextProperty, binding);
-
-
-            binding = new Binding();
-            binding.Path = new PropertyPath("Description");
-            binding.Source = attribute;
-            ImageDescription.SetBinding(TextBox.TextProperty, binding);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -58,9 +48,8 @@ namespace DMS
             if (result == true)
             {
                 string filename = dlg.FileName;
-                FileName.Text = filename;
-                Image = new BitmapImage(new Uri(filename));
-                _attribute.Image = Image;
+                FileName.Text = filename;              
+                _attribute.Value = filename;
             }
         }
     }

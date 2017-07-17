@@ -12,7 +12,7 @@
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <ScrollViewer>
-            <Grid Name="Controls"></Grid>
+            <Grid Name="Controls" Margin="10"></Grid>
             <!--<StackPanel Name="controls" Orientation="Vertical"></StackPanel>-->
         </ScrollViewer>
         <Button Content="SUBMIT" Height="30" Margin="20" Grid.Row="1" Click="Button_Click"></Button>

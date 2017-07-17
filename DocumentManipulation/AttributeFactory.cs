@@ -7,7 +7,7 @@ namespace DocumentManipulation
 {
     class AttributeFactory
     {
-        public static Attribute Create(string type, string properties, Dictionary<string, Attribute> attributes = null)
+        public static Attribute Create(string type, string properties, Dictionary<string, Attribute> attributes = null, DocInputs inputs = null)
         {
             var propertiesMap = properties.Split('|')
                 .ToDictionary(x => x.Split(':')[0], x => x.Split(':').Length > 1 ? x.Split(':')[1] : string.Empty);
@@ -30,10 +30,16 @@ namespace DocumentManipulation
                 case "Image":
                     attribute = new ImageAttribute(type);
                     break;
+                case "File":
+                    attribute = new FileAttribute(type);
+                    break;
                 case "Complex":
                     var attr = new ComplexAttribute(type);
                     attr.SetProperties(propertiesMap, attributes);
                     attribute = attr;
+                    break;
+                case "Unique":
+                    attribute = new UniqueAttribute(type, inputs);
                     break;
                 default:
                     attribute = new Attribute("");

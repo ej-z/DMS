@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Media.Imaging;
 using DocumentFormat.OpenXml;
+using System.Reflection;
 
 namespace DocumentManipulation
 {
@@ -28,11 +29,11 @@ namespace DocumentManipulation
             {
                 var repeaterName = name.Split('.')[0];
                 var attributeName = name.Split('.')[1];
-                repeaters[repeaterName].AddInput(attributeName,type, properties);
+                repeaters[repeaterName].AddInput(attributeName, type, properties);
             }
             else
             {
-                attributes.Add(name, AttributeFactory.Create(type, properties, attributes));
+                attributes.Add(name, AttributeFactory.Create(type, properties, attributes, this));
             }
         }
 
@@ -74,15 +75,15 @@ namespace DocumentManipulation
         public bool GridOnly { get; set; }
         public bool WindowOnly { get; set; }
 
-        
+
         public Attribute(string type)
         {
             Type = type;
         }
 
-        public virtual void SetProperties(Dictionary<string,string> properties)
+        public virtual void SetProperties(Dictionary<string, string> properties)
         {
-            Label = properties.ContainsKey(nameof(Label)) ? properties[nameof(Label)]:null;
+            Label = properties.ContainsKey(nameof(Label)) ? properties[nameof(Label)] : null;
             Row = properties.ContainsKey(nameof(Row)) ? Convert.ToInt32(properties[nameof(Row)]) : -1;
             Column = properties.ContainsKey(nameof(Column)) ? Convert.ToInt32(properties[nameof(Column)]) : -1;
             ColumnSpan = properties.ContainsKey(nameof(ColumnSpan)) ? Convert.ToInt32(properties[nameof(ColumnSpan)]) : -1;
@@ -136,7 +137,7 @@ namespace DocumentManipulation
 
         public override string FinalValue
         {
-            get { return  string.IsNullOrEmpty(base.Value) ? null : Values[base.Value]; }
+            get { return string.IsNullOrEmpty(base.Value) ? null : Values[base.Value]; }
         }
     }
 
@@ -160,7 +161,24 @@ namespace DocumentManipulation
     {
         public LabelAttribute(string type) : base(type)
         {
-            
+
+        }
+    }
+
+    public class FileAttribute : Attribute
+    {
+        public string Address { get; set; }
+
+        public string Filter { get; set; }
+        public FileAttribute(string type) : base(type)
+        {
+
+        }
+
+        public override void SetProperties(Dictionary<string, string> properties)
+        {
+            base.SetProperties(properties);
+            Filter = properties[nameof(Filter)];
         }
     }
 
@@ -171,9 +189,12 @@ namespace DocumentManipulation
 
         }
 
-        public BitmapImage Image { get; set; }
-
         public string Description { get; set; }
+
+        public override string FinalValue
+        {
+            get { return Value; }
+        }
     }
 
     public class ComplexAttribute : Attribute
@@ -202,6 +223,35 @@ namespace DocumentManipulation
                 Attributes.Add(attributes[attributeName]);
             }
         }
+    }
+
+    public class UniqueAttribute : Attribute
+    {
+        public string Class { get; set; }
+        public string Function { get; set; }
+        DocInputs inputs { get; set; }
+
+        public UniqueAttribute(string type, DocInputs inputs) : base(type)
+        {
+            this.inputs = inputs;
+        }
+
+        public override string FinalValue
+        {
+            get {
+                Type type = System.Type.GetType("DocumentManipulation."+Class);
+                object instance = Activator.CreateInstance(type);
+                MethodInfo method = type.GetMethod(Function);
+                return method.Invoke(instance,new object[] { inputs }).ToString();
+            }
+        }
+
+        public override void SetProperties(Dictionary<string, string> properties)
+        {
+            Class = properties[nameof(Class)];
+            Function = properties[nameof(Function)];
+        }
 
     }
+
 }

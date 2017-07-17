@@ -29,9 +29,11 @@ namespace DMS
                     return new EnumControl((EnumAttribute)attribute);
                 case "Image":
                     return new ImageControl((ImageAttribute)attribute);
+                case "File":
+                    return new FileControl((FileAttribute)attribute);
             }
 
-            return new TextBox();
+            return null; 
         }
 
         public static Control GenerateRepeaterControl(string name, DocumentManipulation.Repeater repeater)

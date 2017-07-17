@@ -6,6 +6,11 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentFormat.OpenXml.Packaging;
 using System.Text.RegularExpressions;
 using DocumentFormat.OpenXml;
+using A = DocumentFormat.OpenXml.Drawing;
+using DW = DocumentFormat.OpenXml.Drawing.Wordprocessing;
+using PIC = DocumentFormat.OpenXml.Drawing.Pictures;
+using System.IO;
+using System.Windows.Media.Imaging;
 
 namespace DocumentManipulation
 {
@@ -16,6 +21,8 @@ namespace DocumentManipulation
         string bitRegexExpr = @"\[\[([a-zA-Z0-9]+)\]\]";
 
         string repeaterRegexExpr = @"{{([a-zA-Z0-9]+)\.([a-zA-Z0-9]+)}}";
+
+        string photoExpr = @"\[\[.*\]\]";
 
         public DocInputs ReadDoc(string srcfilename)
         {
@@ -46,6 +53,9 @@ namespace DocumentManipulation
                 var doc = main.Document;
                 var body = doc.Body;
                 Regex attributeRegex = new Regex(attributeRegexExpr);
+                Regex bitRegex = new Regex(bitRegexExpr);
+                Regex repeaterRegex = new Regex(repeaterRegexExpr);
+                Regex photoRegex = new Regex(photoExpr);
                 foreach (Text text in body.Descendants<Text>())
                 {
                     MatchCollection mc1 = attributeRegex.Matches(text.Text);
@@ -55,9 +65,7 @@ namespace DocumentManipulation
                         text.Text = text.Text.Replace(name.ToAttributeString(), inputs.Attributes[name].FinalValue);
                     }
                 }
-
-
-                Regex bitRegex = new Regex(bitRegexExpr);
+                
                 foreach (Table t in body.Descendants<Table>().Where(tbl => bitRegex.IsMatch(tbl.InnerText)))
                 {
                     MatchCollection mc1 = bitRegex.Matches(t.InnerText);
@@ -91,17 +99,16 @@ namespace DocumentManipulation
                             foreach (Match m in mc2)
                             {
                                 var group = m.Groups[1].Value;
-                                if (i < availableBitAttributes[group].Count)
+                                if (availableBitAttributes.ContainsKey(group) && i < availableBitAttributes[group].Count)
                                     text.Text = text.Text.Replace(group.ToGroupString(), availableBitAttributes[group][i].Label);
                                 else
                                     text.Text = string.Empty;
                             }
                         }
                     }
-                }
-                
+                }          
 
-                Regex repeaterRegex = new Regex(repeaterRegexExpr);
+                
                 foreach (Table t in body.Descendants<Table>().Where(tbl => repeaterRegex.IsMatch(tbl.InnerText)))
                 {
                     var repeaterName = repeaterRegex.Match(t.InnerText).Groups[1].Value;
@@ -126,7 +133,43 @@ namespace DocumentManipulation
                             foreach (Match m in mc1)
                             {
                                 var name = m.Groups[2].Value;
-                                text.Text = text.Text.Replace(name.ToRepeaterString(m.Groups[1].Value), repeater.GetAttribute(i,name).FinalValue);
+                                var value = string.Empty;
+                                if (name == "Photono")
+                                    value = i.ToString();
+                                else
+                                    value = repeater.GetAttribute(i, name).FinalValue;
+                                text.Text = text.Text.Replace(name.ToRepeaterString(m.Groups[1].Value), value);
+                            }
+                        }
+                    }
+                }
+
+                foreach (Text text in body.Descendants<Text>())
+                {
+                    MatchCollection mc1 = photoRegex.Matches(text.Text);
+                    foreach (Match m in mc1)
+                    {
+                        text.Text = string.Empty;
+                        {
+                            var repeater = inputs.Repeaters["Sample"];
+                            Paragraph para = text.Ancestors<Paragraph>().FirstOrDefault();
+                            if (para == null)
+                                break;
+
+                            for (int i = 0; i < repeater.Count; i++)
+                            {
+                                ImagePart imagePart = main.AddImagePart(ImagePartType.Jpeg);
+                                var location = repeater.GetAttribute(i, "Photo").FinalValue;
+                                if (!string.IsNullOrEmpty(location))
+                                {
+                                    using (FileStream stream = new FileStream(location, FileMode.Open))
+                                    {
+                                        imagePart.FeedData(stream);
+                                    }
+                                }
+                                AddImageToBody(para, main.GetIdOfPart(imagePart), location);
+                                Run run = para.AppendChild(new Run());
+                                run.AppendChild(new Text("\r\nPhotograph " + i+1 + ". " + repeater.GetAttribute(i, "PhotoDescription").FinalValue + "\r\n\r\n"));
                             }
                         }
                     }
@@ -137,6 +180,97 @@ namespace DocumentManipulation
                 var lastBreak = doc.Descendants<Break>().Last();
                 lastBreak.Remove();
             }
-        } 
+        }
+
+        private static void AddImageToBody(Paragraph para, string relationshipId, string filename)
+        {
+            var img = new BitmapImage();
+            img.BeginInit();
+            img.UriSource = new Uri(filename, UriKind.RelativeOrAbsolute);
+            img.CacheOption = BitmapCacheOption.OnLoad;
+            img.EndInit();
+            var widthPx = img.PixelWidth;
+            var heightPx = img.PixelHeight;
+            var horzRezDpi = img.DpiX;
+            var vertRezDpi = img.DpiY;
+            const int emusPerInch = 914400;
+            const int emusPerCm = 360000;
+            var maxWidthCm = 16.51;
+            var widthEmus = (long)(widthPx / horzRezDpi * emusPerInch);
+            var heightEmus = (long)(heightPx / vertRezDpi * emusPerInch);
+            var maxWidthEmus = (long)(maxWidthCm * emusPerCm);
+            if (widthEmus > maxWidthEmus)
+            {
+                var ratio = (heightEmus * 1.0m) / widthEmus;
+                widthEmus = maxWidthEmus;
+                heightEmus = (long)(widthEmus * ratio);
+            }
+            // Define the reference of the image.
+            var element =
+                 new Drawing(
+                     new DW.Inline(
+                         new DW.Extent() { Cx = widthEmus, Cy = heightEmus },
+                         new DW.EffectExtent()
+                         {
+                             LeftEdge = 0L,
+                             TopEdge = 0L,
+                             RightEdge = 0L,
+                             BottomEdge = 0L
+                         },
+                         new DW.DocProperties()
+                         {
+                             Id = (UInt32Value)1U,
+                             Name = "Picture 1"
+                         },
+                         new DW.NonVisualGraphicFrameDrawingProperties(
+                             new A.GraphicFrameLocks() { NoChangeAspect = true }),
+                         new A.Graphic(
+                             new A.GraphicData(
+                                 new PIC.Picture(
+                                     new PIC.NonVisualPictureProperties(
+                                         new PIC.NonVisualDrawingProperties()
+                                         {
+                                             Id = (UInt32Value)0U,
+                                             Name = "New Bitmap Image.jpg"
+                                         },
+                                         new PIC.NonVisualPictureDrawingProperties()),
+                                     new PIC.BlipFill(
+                                         new A.Blip(
+                                             new A.BlipExtensionList(
+                                                 new A.BlipExtension()
+                                                 {
+                                                     Uri =
+                                                        "{28A0092B-C50C-407E-A947-70E740481C1C}"
+                                                 })
+                                         )
+                                         {
+                                             Embed = relationshipId,
+                                             CompressionState =
+                                             A.BlipCompressionValues.Print
+                                         },
+                                         new A.Stretch(
+                                             new A.FillRectangle())),
+                                     new PIC.ShapeProperties(
+                                         new A.Transform2D(
+                                             new A.Offset() { X = 0L, Y = 0L },
+                                             new A.Extents() { Cx = 990000L, Cy = 792000L }),
+                                         new A.PresetGeometry(
+                                             new A.AdjustValueList()
+                                         )
+                                         { Preset = A.ShapeTypeValues.Rectangle }))
+                             )
+                             { Uri = "http://schemas.openxmlformats.org/drawingml/2006/picture" })
+                     )
+                     {
+                         DistanceFromTop = (UInt32Value)0U,
+                         DistanceFromBottom = (UInt32Value)0U,
+                         DistanceFromLeft = (UInt32Value)0U,
+                         DistanceFromRight = (UInt32Value)0U,
+                         EditId = "50D07946"
+                     });
+
+            // Append the reference to body, the element should be in a Run.
+            para.AppendChild(new Run(element));
+        }
     }
 }

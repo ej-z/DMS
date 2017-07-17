@@ -2,3 +2,6 @@
 *.user
 bin
 obj
+/DMS/Data/~$Loose fill form .xlsx
+/DMS/Data/res.docx
+/DMS/Data/img.jpg
