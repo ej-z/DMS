@@ -22,7 +22,7 @@ namespace DocumentManipulation
 
         string repeaterRegexExpr = @"{{([a-zA-Z0-9]+)\.([a-zA-Z0-9]+)}}";
 
-        string photoExpr = @"\[\[.*\]\]";
+        string photoExpr = @"\[\[\[.*\]\]\]";
 
         public DocInputs ReadDoc(string srcfilename)
         {
@@ -124,19 +124,20 @@ namespace DocumentManipulation
                         t.Append(newRow.CloneNode(true));
                     }
 
-                    for(int i = 0; i< repeater.Count;i++)
+                    var ph = 1;
+                    for (int i = 0; i< repeater.Count;i++)
                     {
-                        var r = t.Descendants<TableRow>().Skip(i).First(tbl => repeaterRegex.IsMatch(tbl.InnerText));
+                        var r = t.Descendants<TableRow>().Skip(i).First(tbl => repeaterRegex.IsMatch(tbl.InnerText));                        
                         foreach (Text text in r.Descendants<Text>())
                         {
-                            MatchCollection mc1 = repeaterRegex.Matches(text.Text);
+                            MatchCollection mc1 = repeaterRegex.Matches(text.Text);                            
                             foreach (Match m in mc1)
                             {
                                 var name = m.Groups[2].Value;
                                 var value = string.Empty;
-                                if (name == "Photono")
-                                    value = i.ToString();
-                                else
+                                if (name == "Photono" && !string.IsNullOrEmpty(repeater.GetAttribute(i, "Photo").FinalValue))
+                                    value = (ph++).ToString();
+                                else if(name != "Photono")
                                     value = repeater.GetAttribute(i, name).FinalValue;
                                 text.Text = text.Text.Replace(name.ToRepeaterString(m.Groups[1].Value), value);
                             }
@@ -155,7 +156,7 @@ namespace DocumentManipulation
                             Paragraph para = text.Ancestors<Paragraph>().FirstOrDefault();
                             if (para == null)
                                 break;
-
+                            var ph = 1;
                             for (int i = 0; i < repeater.Count; i++)
                             {
                                 ImagePart imagePart = main.AddImagePart(ImagePartType.Jpeg);
@@ -166,10 +167,10 @@ namespace DocumentManipulation
                                     {
                                         imagePart.FeedData(stream);
                                     }
-                                }
-                                AddImageToBody(para, main.GetIdOfPart(imagePart), location);
-                                Run run = para.AppendChild(new Run());
-                                run.AppendChild(new Text("\r\nPhotograph " + i+1 + ". " + repeater.GetAttribute(i, "PhotoDescription").FinalValue + "\r\n\r\n"));
+                                    AddImageToBody(para, main.GetIdOfPart(imagePart), location);
+                                    Run run = para.AppendChild(new Run());
+                                    run.AppendChild(new Text("\r\nPhotograph " + (ph++) + ". " + repeater.GetAttribute(i, "PhotoDescription").FinalValue + "\r\n\r\n"));
+                                }                                
                             }
                         }
                     }
